@@ -27,6 +27,9 @@ const SplashScreen: FC = () => {
         const refreshToken = tokenStorage.getString('refreshToken') as string;
         const user = useAuthStore.getState().user;
 
+        console.log('Access Token:', accessToken);
+        console.log('Refresh Token:', refreshToken);
+
         if (accessToken) {
             const decodedAccessToken = jwtDecode<DecodedToken>(accessToken);
             const decodedRefreshToken = jwtDecode<DecodedToken>(refreshToken);
@@ -34,6 +37,7 @@ const SplashScreen: FC = () => {
             const currentTime = Date.now() / 1000;
 
             if (decodedRefreshToken?.exp < currentTime) {
+                console.log('Refresh Token Expired');
                 resetAndNavigate('CustomerLogin');
                 Alert.alert('Error', 'Session Expired Please login again');
                 return false;
@@ -52,16 +56,20 @@ const SplashScreen: FC = () => {
                     return false;
                 }
             }
+            console.log('User:', user);
             if (user?.role === 'customer') {
+                console.log('Product Dashboard');
                 resetAndNavigate('ProductDashboard');
             } else if (user?.role === 'delivery_partner') {
+                console.log('Delivery Dashboard');
                 resetAndNavigate('DeliveryDashboard');
             } else {
                 resetAndNavigate('CustomerLogin');
             }
+        } else {
+            console.log('No Access Token');
+            resetAndNavigate('CustomerLogin');
         }
-
-        resetAndNavigate('CustomerLogin');
         return false;
     };
 

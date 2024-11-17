@@ -17,11 +17,27 @@ export const sendOTP = async (phone: string) => {
     }
 };
 
+export const verifyOTP = async (phone: string, otp: string, role: string) => {
+    try {
+        console.log('OTP Verification:', phone, otp);
+        const response = await axios.post(`${CUSTOMER_URL}/verify-code`, {
+            phone,
+            code: otp,
+            role,
+        });
+        tokenStorage.set('accessToken', response.data.token);
+        tokenStorage.set('refreshToken', response.data.refreshToken);
+        const { setUser } = useAuthStore.getState();
+        setUser(response.data.user);
+        return response.data;
+    } catch (error) {
+        console.error('OTP Verification Error:', error);
+        throw error;
+    }
+};
+
 export const customerLogin = async (phone: string, password: string) => {
     try {
-        if (!password) {
-            password = 'Aman@123';
-        }
         const response = await axios.post(`${CUSTOMER_URL}/login`, {
             phone,
             password,
@@ -37,14 +53,12 @@ export const customerLogin = async (phone: string, password: string) => {
     }
 };
 
-export const deliveryLogin = async (email: string, password: string) => {
+export const deliveryLogin = async (email: string, password: string, role: string) => {
     try {
-        if (!password) {
-            password = 'Aman@123';
-        }
         const response = await axios.post(`${CUSTOMER_URL}/login`, {
             email,
             password,
+            role,
         });
 
         tokenStorage.set('accessToken', response.data.token);

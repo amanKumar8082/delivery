@@ -1,4 +1,5 @@
-import React, {FC} from 'react';
+import React, { FC } from 'react';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import SplashScreen from '@features/auth/SplashScreen';
@@ -12,32 +13,34 @@ const Stack = createNativeStackNavigator();
 
 const Navigation: FC = () => {
   return (
-    <NavigationContainer ref={navigationRef} >
+    <GestureHandlerRootView>
+      <NavigationContainer ref={navigationRef}>
         <Stack.Navigator
-            initialRouteName="SplashScreen"
-            screenOptions={{
-              headerShown: false,
-            }}
+          initialRouteName="SplashScreen"
+          screenOptions={{
+            headerShown: false,
+          }}
         >
-            <Stack.Screen name="SplashScreen" component={SplashScreen} />
-            <Stack.Screen name="ProductDashboard" component={ProductDashboard} />
-            <Stack.Screen name="DeliveryDashboard" component={DeliveryDashboard} />
-
-            <Stack.Screen
-                options={{
-                    animation: 'fade',
-                }}
-                name="CustomerLogin"
-                component={CustomerLogin} />
-            <Stack.Screen
-                options={{
-                    animation: 'fade',
-                }}
-                name="DeliveryLogin"
-                component={DeliveryLogin} />
-
+          <Stack.Screen name="SplashScreen" component={SplashScreen} />
+          <Stack.Screen name="ProductDashboard" component={ProductDashboard} />
+          <Stack.Screen name="DeliveryDashboard" component={DeliveryDashboard} />
+          <Stack.Screen
+            options={{
+              animation: 'fade',
+            }}
+            name="CustomerLogin"
+            component={CustomerLogin}
+          />
+          <Stack.Screen
+            options={{
+              animation: 'fade',
+            }}
+            name="DeliveryLogin"
+            component={DeliveryLogin}
+          />
         </Stack.Navigator>
-    </NavigationContainer>
+      </NavigationContainer>
+    </GestureHandlerRootView>
   );
 };
 

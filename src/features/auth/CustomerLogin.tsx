@@ -13,7 +13,8 @@ import CustomButton from '@components/ui/CustomButton';
 import useKeyboardOffsetHeight from '@utils/useKeyboardOffsetHeight';
 import { RFValue } from 'react-native-responsive-fontsize';
 import LinearGradient from 'react-native-linear-gradient';
-import { customerLogin } from '@service/authService';
+import { sendOTP, verifyOTP } from '@service/authService';
+import OTPInput from './OtpInput';
 
 const bottomColors = [...lightColors].reverse();
 
@@ -21,6 +22,8 @@ const CustomerLogin: FC = () => {
 
     const [phoneNumber, setPhoneNumber] = React.useState('');
     const [loading, setLoading] = React.useState(false);
+    const [showOTPInput, setShowOTPInput] = React.useState(false);
+    const [otp, setOTP] = React.useState(['', '', '', '', '', '']);
     const [gestureSequence, setGestureSequence] = React.useState<string[]>([]);
     const keyboardOffsetHeight = useKeyboardOffsetHeight();
 
@@ -69,9 +72,13 @@ const CustomerLogin: FC = () => {
         Keyboard.dismiss();
         setLoading(true);
         try {
-            // await sendOTP(phoneNumber);
-            await customerLogin(phoneNumber, 'Aman@123');
-            resetAndNavigate('ProductDashboard');
+            const response = await sendOTP(phoneNumber);
+            console.log('OTP Verification Response:', response);
+            if(response.status === 200){
+                setShowOTPInput(true);
+            } else {
+                Alert.alert('Error', '');
+            }
         }
         catch (e) {
             Alert.alert('Login Failed');
@@ -79,6 +86,29 @@ const CustomerLogin: FC = () => {
             setLoading(false);
         }
     };
+
+    const handleVerifyOTP = async () => {
+        setLoading(true);
+        try {
+          const response = await verifyOTP(phoneNumber, otp.join(''), 'customer'); // Simulating OTP verification
+          if (response.status === 200) {
+            if (response.user.role === 'customer') {
+                console.log('Product Dashboard');
+              resetAndNavigate('ProductDashboard');
+            } else if (response.user.role === 'delivery_partner') {
+                console.log('Delivery Dashboard');
+              resetAndNavigate('DeliveryDashboard');
+            }
+            resetAndNavigate('ProductDashboard');
+          } else {
+            Alert.alert('Error', 'Invalid OTP. Try again.');
+          }
+        } catch (e) {
+          Alert.alert('Verification Failed', 'Unable to verify OTP.');
+        } finally {
+          setLoading(false);
+        }
+      };
 
   return (
     <GestureHandlerRootView style={styles.container}>
@@ -98,21 +128,42 @@ const CustomerLogin: FC = () => {
                             <Image source={Logo} style={styles.logo}/>
                             <CustomText variant="h2" fontFamily={Fonts.Bold}>India's Last Minute APP</CustomText>
                             <CustomText variant="h5" fontFamily={Fonts.SemiBold} style={styles.text}>Login Or Signup</CustomText>
-                            <CustomInput
-                                left={<CustomText variant="h6" style={styles.phoneText} fontFamily={Fonts.SemiBold}>+91</CustomText>}
+                            {!showOTPInput ? (
+                            <>
+                                <CustomInput
+                                left={
+                                    <CustomText
+                                    variant="h6"
+                                    style={styles.phoneText}
+                                    fontFamily={Fonts.SemiBold}
+                                    >
+                                    +91
+                                    </CustomText>
+                                }
                                 value={phoneNumber}
                                 onChangeText={(text) => setPhoneNumber(text.slice(0, 10))}
                                 onClear={() => setPhoneNumber('')}
                                 placeholder="Enter mobile number"
                                 keyboardType="phone-pad"
                                 inputMode="numeric"
-                            />
-                            <CustomButton
+                                />
+                                <CustomButton
                                 title="Continue"
-                                onPress={() => handleAuth()}
+                                onPress={handleAuth}
                                 disabled={phoneNumber.length !== 10}
                                 loading={loading}
-                            />
+                                />
+                            </>
+                            ) : (
+                            <>
+                                <OTPInput
+                                    otp={otp}
+                                    setOTP={setOTP}
+                                    handleVerifyOTP={handleVerifyOTP}
+                                    loading={loading}
+                                />
+                            </>
+                            )}
                         </View>
                     </Animated.ScrollView>
                 </PanGestureHandler>
