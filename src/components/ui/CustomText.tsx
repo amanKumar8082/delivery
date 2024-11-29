@@ -57,11 +57,18 @@ const CustomText: React.FC<Props> = ({ variant = 'body', fontFamily = Fonts.Regu
         <Text
             numberOfLines={numberOfLines}
             onLayout={onLayout}
-            style={[styles.text, { fontSize: computedFontSize }, fontFamilyStyle, style, {color: Colors.text}]}
+            style={[
+                styles.text,
+                { fontSize: computedFontSize },
+                fontFamilyStyle,
+                { color: Colors.text }, // Default color
+                ...(Array.isArray(style) ? style : [style]), // Parent styles come last
+            ]}
             {...props}
-        >
+            >
             {children}
         </Text>
+
     );
 };
 

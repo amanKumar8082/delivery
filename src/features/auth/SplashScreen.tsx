@@ -1,3 +1,4 @@
+
 import { View, Image, StyleSheet, Alert } from 'react-native';
 import React, { FC, useEffect } from 'react';
 import { Colors } from '@utils/Constants';
@@ -22,10 +23,12 @@ interface DecodedToken{
 }
 
 const SplashScreen: FC = () => {
+    const {user, setUser} = useAuthStore();
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     const tokenCheck = async () => {
         const accessToken = tokenStorage.getString('accessToken') as string;
         const refreshToken = tokenStorage.getString('refreshToken') as string;
-        const user = useAuthStore.getState().user;
 
         console.log('Access Token:', accessToken);
         console.log('Refresh Token:', refreshToken);
@@ -38,20 +41,21 @@ const SplashScreen: FC = () => {
 
             if (decodedRefreshToken?.exp < currentTime) {
                 console.log('Refresh Token Expired');
-                resetAndNavigate('CustomerLogin');
+                // resetAndNavigate('CustomerLogin');
+                resetAndNavigate('ProductDashboard');
                 Alert.alert('Error', 'Session Expired Please login again');
                 return false;
             }
 
             if (decodedAccessToken.exp < currentTime) {
-                console.log('Access Token Expired');
                 try {
-                    // eslint-disable-next-line react-hooks/rules-of-hooks
-                    const {setUser} = useAuthStore();
-                    refresh_tokens();
+                    console.log('Access Token Expired');
+                    const refreshTokenResponse = await refresh_tokens();
+                    console.log('Refresh Token Response:', refreshTokenResponse);
                     await refetchUser(setUser);
                 } catch (error) {
-                    resetAndNavigate('CustomerLogin');
+                    // resetAndNavigate('CustomerLogin');
+                    resetAndNavigate('ProductDashboard');
                     Alert.alert('Error', 'Session Expired Please login again');
                     return false;
                 }
@@ -62,13 +66,16 @@ const SplashScreen: FC = () => {
                 resetAndNavigate('ProductDashboard');
             } else if (user?.role === 'delivery_partner') {
                 console.log('Delivery Dashboard');
-                resetAndNavigate('DeliveryDashboard');
+                // resetAndNavigate('DeliveryDashboard');
+                resetAndNavigate('ProductDashboard');
             } else {
-                resetAndNavigate('CustomerLogin');
+                // resetAndNavigate('CustomerLogin');
+                resetAndNavigate('ProductDashboard');
             }
         } else {
             console.log('No Access Token');
-            resetAndNavigate('CustomerLogin');
+            // resetAndNavigate('CustomerLogin');
+            resetAndNavigate('ProductDashboard');
         }
         return false;
     };
@@ -93,7 +100,7 @@ const SplashScreen: FC = () => {
             clearTimeout(timeoutId);
         };
     }
-    , []);
+    , [tokenCheck]);
 
     // // getting live location
 

@@ -74,6 +74,8 @@ export const deliveryLogin = async (email: string, password: string, role: strin
 export const refetchUser = async (setUser: any) => {
     try {
         const response = await appAxios.get(`${CUSTOMER_URL}/profile`);
+        console.log('Refetch User:', response.data);
+        console.log('setUser:', setUser);
         setUser(response.data.user);
     }catch (error) {
         console.error('Login Error:', error);
@@ -84,15 +86,20 @@ export const refetchUser = async (setUser: any) => {
 export const refresh_tokens = async () => {
     try {
         const refreshToken = tokenStorage.getString('refreshToken');
+        const user = useAuthStore.getState().user;
+        if (!user) {
+            throw new Error('User is not authenticated');
+        }
         const response = await axios.post(`${CUSTOMER_URL}/refresh-token`, {
             refreshToken,
+            phone: user.phone,
         });
 
+        console.log('Refresh Token Response:', response.data);
         const new_access_token = response.data.token;
-        const new_refresh_token = response.data.refresToken;
 
-        tokenStorage.set('accessToken', new_access_token);
-        tokenStorage.set('refreshToken', new_refresh_token);
+        tokenStorage.set('accessToken', response.data.token);
+        tokenStorage.set('refreshToken', response.data.refreshToken);
         return new_access_token;
     } catch (error) {
         console.log('Refresh Token Error', error);

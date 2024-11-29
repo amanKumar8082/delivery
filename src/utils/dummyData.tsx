@@ -160,8 +160,6 @@ export const wavyData = "M 0 2000 0 500 Q 62.5 280 125 500 t 125 0 125 0 125 0 1
 
 
 
-
-
 export const orders = [
     {
         orderId: 'ORDER21312',
