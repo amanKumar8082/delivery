@@ -1,5 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
 import CustomText from '@components/ui/CustomText';
+import UniversalAdd from '@components/ui/UniversalAdd';
 import { Colors, Fonts } from '@utils/Constants';
 import { screenHeight } from '@utils/Scaling';
 import React, { FC } from 'react';

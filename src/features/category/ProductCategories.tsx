@@ -5,6 +5,7 @@ import { Colors } from '@utils/Constants';
 import { getAllCategories, getProductsByCategoryType } from '@service/productService';
 import SideBar from './SideBar';
 import ProductList from './ProductList';
+import withCart from '@features/cart/WithCart';
 
 const ProductCategories: FC = () => {
 
@@ -90,4 +91,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ProductCategories;
+export default withCart( ProductCategories);
