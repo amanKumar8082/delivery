@@ -16,21 +16,25 @@ interface CartSummaryProps {
 const CartSummary: FC<CartSummaryProps> = ({ cartCount, cartImage }) => {
     return (
         <View style={styles.container}>
-            <View style={styles.flexRowGap}>
-                <Image source={cartImage === null ? require('@assets/icons/bucket.png') : { uri: cartImage }} style={styles.image} />
+            <View style={styles.itemGroup}>
+                <Image
+                    source={cartImage === null ? require('@assets/icons/bucket.png') : { uri: cartImage }}
+                    style={styles.image}
+                />
                 <CustomText fontFamily={Fonts.SemiBold}>
                     {cartCount} ITEM{cartCount > 1 ? 'S' : ''}
                 </CustomText>
-
-                <Icon name = "arrow-drop-up" color={Colors.secondary} size={RFValue(12)} />
+                <Icon name="chevron-up" color={Colors.secondary} size={RFValue(18)} />
             </View>
             <TouchableOpacity
                 style={styles.btn}
                 activeOpacity={0.7}
                 onPress={() => navigate('ProductOrder')}
             >
-                <CustomText style={styles.btnText} fontFamily={Fonts.Medium}>Next</CustomText>
-                <Icon name = "arrow-right" color="#fff" size={RFValue(25)} />
+                <CustomText style={styles.btnText} fontFamily={Fonts.Medium}>
+                    Next
+                </CustomText>
+                <Icon name="chevron-right" color="#fff" size={RFValue(25)} />
             </TouchableOpacity>
         </View>
     );
@@ -38,17 +42,17 @@ const CartSummary: FC<CartSummaryProps> = ({ cartCount, cartImage }) => {
 
 const styles = StyleSheet.create({
     container: {
-        justifyContent: 'center',
-        alignItems: 'center',
         flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
         paddingHorizontal: screenWidth * 0.05,
         paddingBottom: screenHeight * 0.03,
         paddingTop: screenHeight * 0.014,
     },
-    flexRowGap: {
+    itemGroup: {
         flexDirection: 'row',
-        gap:screenWidth * 0.03,
         alignItems: 'center',
+        gap: screenWidth * 0.03,
     },
     image: {
         width: screenWidth * 0.1,
