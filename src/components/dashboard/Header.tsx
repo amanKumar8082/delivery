@@ -32,7 +32,7 @@ const Header:FC<{showNotice:()=>void}> = ({showNotice}) => {
 
                 <View style={styles.flexRowGap}>
                     <CustomText numberOfLines={1} fontFamily={Fonts.Medium} variant="h8" style={styles.text2}>
-                        {user && user.address.length > 0 ? user.address[0] : 'Knowhere'}
+                        {user && user.address.length > 0 ? user.address[0]?.completeAddress : 'Knowhere'}
                     </CustomText>
                     <Icon name="menu-down"size={RFValue(20)} color="#fff" style={{bottom:-1}} />
                 </View>
