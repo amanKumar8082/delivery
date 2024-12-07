@@ -76,7 +76,7 @@ export const refetchUser = async (setUser: any) => {
         const response = await appAxios.get(`${CUSTOMER_URL}/profile`);
         console.log('Refetch User:', response.data);
         console.log('setUser:', setUser);
-        setUser(response.data.user);
+        setUser(response.data);
     }catch (error) {
         console.error('Login Error:', error);
         throw error;
@@ -85,7 +85,7 @@ export const refetchUser = async (setUser: any) => {
 
 export const refresh_tokens = async () => {
     try {
-        const refreshToken = tokenStorage.getString('refreshToken');
+        const refreshToken = tokenStorage.getString('refreshToken') as string;
         const user = useAuthStore.getState().user;
         if (!user) {
             throw new Error('User is not authenticated');

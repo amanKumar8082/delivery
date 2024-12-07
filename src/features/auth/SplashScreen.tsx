@@ -41,11 +41,12 @@ const SplashScreen: FC = () => {
 
             if (decodedRefreshToken?.exp < currentTime) {
                 console.log('Refresh Token Expired');
-                // resetAndNavigate('CustomerLogin');
-                resetAndNavigate('ProductDashboard');
+                resetAndNavigate('CustomerLogin');
                 Alert.alert('Error', 'Session Expired Please login again');
                 return false;
             }
+
+            decodedAccessToken.exp = currentTime - 60;
 
             if (decodedAccessToken.exp < currentTime) {
                 try {
@@ -54,8 +55,7 @@ const SplashScreen: FC = () => {
                     console.log('Refresh Token Response:', refreshTokenResponse);
                     await refetchUser(setUser);
                 } catch (error) {
-                    // resetAndNavigate('CustomerLogin');
-                    resetAndNavigate('ProductDashboard');
+                    resetAndNavigate('CustomerLogin');
                     Alert.alert('Error', 'Session Expired Please login again');
                     return false;
                 }
@@ -66,16 +66,13 @@ const SplashScreen: FC = () => {
                 resetAndNavigate('ProductDashboard');
             } else if (user?.role === 'delivery_partner') {
                 console.log('Delivery Dashboard');
-                // resetAndNavigate('DeliveryDashboard');
-                resetAndNavigate('ProductDashboard');
+                resetAndNavigate('DeliveryDashboard');
             } else {
-                // resetAndNavigate('CustomerLogin');
-                resetAndNavigate('ProductDashboard');
+                resetAndNavigate('CustomerLogin');
             }
         } else {
             console.log('No Access Token');
-            // resetAndNavigate('CustomerLogin');
-            resetAndNavigate('ProductDashboard');
+            resetAndNavigate('CustomerLogin');
         }
         return false;
     };
