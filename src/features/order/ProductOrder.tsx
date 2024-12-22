@@ -121,7 +121,7 @@ const ProductOrder:FC = () => {
                             <View style={{width:'75%'}}>
                                 <CustomText variant="h8" fontFamily={Fonts.Medium}>Delivering to Home</CustomText>
                                 <CustomText variant="h9" numberOfLines={2} style={{opacity:0.6}}>
-                                    {user?.address[0]?.completeAddress || 'Behind Kali Mandir, Bhagwanpur Chaksekhu, Dalsingsarai, Samastipur, Bihar, 848114'}
+                                    {user?.address[0]?.completeAddress || 'Knowhere'}
                                 </CustomText>
                             </View>
                         </View>

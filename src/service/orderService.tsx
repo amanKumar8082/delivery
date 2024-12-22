@@ -14,3 +14,13 @@ export const createOrder = async (products: any[], total: number, address: any) 
         throw error;
     }
 };
+
+export const getOrderByID = async (id: string) => {
+    try {
+        const response = await appAxios.get(`${SHOPPING_URL}/order/${id}`);
+        return response.data;
+    }catch (error) {
+        console.error('Login Error:', error);
+        throw error;
+    }
+};
