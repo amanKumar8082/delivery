@@ -73,6 +73,21 @@ const LiveTracking:FC = () => {
                 <DeliveryDetails details={user} />
                 <OrderSummary order={currentOrder} />
 
+                <View style={styles.flexRow}>
+                    <View style={styles.iconContainer}>
+                        <Icon name="cards-heart-outline" size={RFValue(20)} color={Colors.disabled} />
+                    </View>
+
+                    <View style={{width:'82%'}}>
+                        <CustomText variant="h7" fontFamily={Fonts.SemiBold}>Payment Method</CustomText>
+                        <CustomText variant="h9" fontFamily={Fonts.Medium}>Cash on Delivery</CustomText>
+                    </View>
+                </View>
+
+                <CustomText fontFamily={Fonts.SemiBold} variant="h6" style={{opacity:0.6, marginTop:20}}>
+                    Aman Kumar x Blinkit
+                </CustomText>
+
             </ScrollView>
         </View>
     );
