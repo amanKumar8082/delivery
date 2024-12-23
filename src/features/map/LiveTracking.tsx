@@ -12,6 +12,7 @@ import { RFValue } from 'react-native-responsive-fontsize';
 import CustomText from '@components/ui/CustomText';
 import DeliveryDetails from './DeliveryDetails';
 import OrderSummary from './OrderSummary';
+import withLiveStatus from './withLiveStatus';
 
 const LiveTracking:FC = () => {
 
@@ -75,7 +76,7 @@ const LiveTracking:FC = () => {
 
                 <View style={styles.flexRow}>
                     <View style={styles.iconContainer}>
-                        <Icon name="cards-heart-outline" size={RFValue(20)} color={Colors.disabled} />
+                        <Icon name="heart-outline" size={RFValue(20)} color={Colors.disabled} />
                     </View>
 
                     <View style={{width:'82%'}}>
@@ -125,4 +126,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default LiveTracking;
+export default withLiveStatus(LiveTracking);
